@@ -20,11 +20,12 @@ namespace API_CuentasBancarias.Controllers
         // GET: api/cuentas
         // Obtener todas las cuentas bancarias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CuentaBancaria>>> GetCuentasBancarias()
+        public async Task<ActionResult<IEnumerable<CuentaBancaria>>> GetCuentasBancarias() 
         {
             var cuentas = await _context.CuentasBancarias.ToListAsync();
             return Ok(cuentas);
-        }
+        } //async/await: Operación asíncrona para no bloquear el hilo
+
 
         // GET: api/cuentas/5
         // Obtener una cuenta específica por ID
@@ -68,7 +69,7 @@ namespace API_CuentasBancarias.Controllers
                 return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID de la cuenta" });
             }
 
-            _context.Entry(cuenta).State = EntityState.Modified;
+            _context.Entry(cuenta).State = EntityState.Modified; //EntityState.Modified: Marca todas las propiedades como modificadas
 
             try
             {
@@ -111,6 +112,7 @@ namespace API_CuentasBancarias.Controllers
         private bool CuentaExists(int id)
         {
             return _context.CuentasBancarias.Any(e => e.Id == id);
-        }
+        } //Verifica si existe una cuenta con el ID especificado sin cargar el objeto completo
+          //(más eficiente que FindAsync para solo verificar existencia).
     }
 }
